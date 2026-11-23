@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>찬양 곡 노트</title>
+<style>
+:root{--bg:#f6f6f4;--card:#ffffff;--ink:#1f2328;--sub:#6b7280;--line:#e7e7e3;--acc:#24272b;--accInk:#ffffff;--chip:#f0f0ed;--soft:#fafaf8;
+--c1:#f3d98b;--c2:#f1b9a4;--c3:#bcd9a3;--c4:#f0b4c6;--c5:#a9cce6;--c6:#a9dccf;--c7:#cdbdea;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161718;--card:#1f2123;--ink:#ececea;--sub:#9a9ea4;--line:#2f3235;--acc:#ececea;--accInk:#161718;--chip:#2a2c2f;--soft:#1b1c1e;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#161718;--card:#1f2123;--ink:#ececea;--sub:#9a9ea4;--line:#2f3235;--acc:#ececea;--accInk:#161718;--chip:#2a2c2f;--soft:#1b1c1e;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;line-height:1.5}
+.wrap{max-width:1000px;margin:0 auto;padding:24px 16px 70px}
+h1{font-size:1.45rem;margin:0;letter-spacing:-.02em}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.sub{color:var(--sub);font-size:.88rem}
+button,input,select{font:inherit;color:inherit}
+.btn{background:var(--acc);color:var(--accInk);border:1px solid var(--acc);border-radius:10px;padding:9px 16px;font-weight:700;cursor:pointer}
+.btn.ghost{background:var(--card);color:var(--ink);border-color:var(--line);font-weight:600}
+.btn.ghost:hover{background:var(--chip)}
+.btn.sm{padding:5px 10px;font-size:.84rem;border-radius:8px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+input[type=text],input[type=url],select{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 12px;width:100%;outline:none}
+input:focus,select:focus{border-color:var(--sub)}
+.tools input{flex:1;min-width:160px;width:auto}.tools select{width:auto}
+.chiprow{display:flex;gap:8px;align-items:flex-start;margin-bottom:18px}
+.chiprow>.chip{flex:none;border-style:dashed}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 14px;cursor:pointer;font-size:.9rem;white-space:nowrap}
+.chip.on{background:var(--acc);color:var(--accInk);border-color:var(--acc);font-weight:700}
+.chip small{opacity:.6;margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.row{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.title{font-weight:800;font-size:1.04rem;word-break:keep-all}
+.key{background:var(--chip);color:var(--ink);border-radius:8px;padding:2px 9px;font-weight:800;font-size:.88rem;white-space:nowrap}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:.76rem;padding:2px 9px;border-radius:999px;color:#2b2b2b;font-weight:600}
+.lyric{color:var(--sub);font-size:.9rem;border-left:3px solid var(--line);padding-left:8px;word-break:keep-all}
+.acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+.acts a{text-decoration:none}
+.empty{text-align:center;color:var(--sub);padding:50px 10px;border:1px dashed var(--line);border-radius:14px;background:var(--card)}
+.ov{position:fixed;inset:0;background:rgba(15,16,18,.45);display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:20px 12px;z-index:20}
+.ov.show{display:flex}
+.modal{background:var(--card);border-radius:16px;padding:20px;width:100%;max-width:520px;margin:auto;box-shadow:0 10px 40px rgba(0,0,0,.18)}
+.modal.wide{max-width:900px}
+.modal h2{margin:0 0 12px;font-size:1.15rem}
+label{display:block;font-weight:700;font-size:.88rem;margin:14px 0 5px}
+.pick{display:flex;gap:7px;flex-wrap:wrap}
+.pick .chip{user-select:none}
+.thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.thumbs div{position:relative}
+.thumbs img{height:70px;border-radius:8px;border:1px solid var(--line);display:block}
+.thumbs b{position:absolute;top:-6px;right:-6px;background:#c0392b;color:#fff;border-radius:50%;width:20px;height:20px;text-align:center;line-height:20px;cursor:pointer;font-size:.8rem}
+.foot{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
+.sheet img{width:100%;border-radius:8px;margin-bottom:10px;background:#fff;border:1px solid var(--line)}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--acc);color:var(--accInk);padding:9px 16px;border-radius:10px;display:none;z-index:30;font-size:.9rem}
+.banner{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:.9rem;line-height:1.7}
+.banner input{width:150px;padding:6px 10px}
+.pill{background:#d64545;color:#fff;border-radius:999px;padding:0 8px;font-size:.78rem;margin-left:6px}
+.mrow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.mrow small{color:var(--sub);display:block}
+.kh{display:flex;align-items:center;gap:8px;margin:20px 0 8px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.kh .key{font-size:1.05rem}
+.sg{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.sc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;cursor:pointer;display:flex;flex-direction:column;gap:4px}
+.sc img{width:100%;height:150px;object-fit:cover;object-position:top;border-radius:8px;background:#fff;border:1px solid var(--line)}
+.st{font-weight:700;font-size:.9rem;word-break:keep-all}
+.sc small{color:var(--sub)}
+.addbox{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0}
+.addbox .r{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+.addbox select{width:auto}.addbox input[type=text]{flex:1;min-width:140px;width:auto}
+textarea{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 12px;width:100%;font:inherit;resize:vertical;outline:none;color:inherit}
+textarea:focus{border-color:var(--sub)}
+.ctlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;max-height:46vh;overflow:auto;padding:2px}
+.ct{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 10px;cursor:pointer}
+.ct.on{border-color:var(--acc);background:var(--chip)}
+.num{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem}
+.ct.on .num{background:var(--acc);color:var(--accInk);border-color:var(--acc)}
+.ct .mid{flex:1;min-width:0}
+.ct .t{font-weight:700;font-size:.92rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ct small{color:var(--sub)}
+.mv{display:flex;flex-direction:column;gap:2px}
+.mv button{border:1px solid var(--line);background:var(--card);border-radius:6px;font-size:.7rem;padding:0 7px;cursor:pointer}
+input[type=password]{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 10px;outline:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div><h1>🎶 찬양 곡 노트</h1><div class="sub" id="count"></div></div>
+    <button class="btn" id="add" style="display:none">+ 곡 등록</button>
+  </div>
+  <div class="nav"><button class="btn sm" id="ct">📝 콘티 만들기</button><button class="btn ghost sm" id="lib">📁 악보 보관함</button><button class="btn ghost sm" id="shr">🔗 앱 공유</button><button class="btn ghost sm" id="lo" style="display:none">로그아웃</button><button class="btn ghost sm" id="mng" style="display:none">👥 멤버 관리<span class="pill" id="pend" style="display:none"></span></button></div>
+  <div class="banner" id="banner"></div>
+  <div class="tools">
+    <input type="text" id="q" placeholder="제목·가사 검색">
+    <select id="kf"><option value="">모든 키</option></select>
+  </div>
+  <div class="chiprow"><button class="chip" id="cm" style="display:none">＋ 분류 관리</button><div class="chips" id="chips"></div></div>
+  <div class="grid" id="list"></div>
+</div>
+
+<div class="ov" id="formOv"><div class="modal">
+  <h2 id="fh">곡 등록</h2>
+  <label>CCM 제목</label><input type="text" id="fTitle" placeholder="예) 주 은혜임을">
+  <label>가사 한 줄 (목록에 표시돼요)</label><input type="text" id="fLyric" maxlength="80" placeholder="예) 내 영혼이 주를 찬양해">
+  <label>음원 유튜브 링크</label><input type="url" id="fYt" placeholder="https://youtu.be/...">
+  <label>음원 키</label><select id="fKey"></select>
+  <label>가사 묵상 분류 (여러 개 선택 가능)</label><div class="pick" id="fCats"></div>
+  <label>악보 (이미지, 여러 장 가능)</label>
+  <input type="file" id="fFile" accept="image/*" multiple>
+  <div class="thumbs" id="fThumbs"></div>
+  <div class="foot"><button class="btn ghost" id="cancel">취소</button><button class="btn" id="save">저장</button></div>
+</div></div>
+
+<div class="ov" id="ctOv"><div class="modal wide">
+  <div class="row"><h2>📝 콘티 만들기</h2><button class="btn sm ghost" id="ctClose">닫기</button></div>
+  <label>콘티명</label><input type="text" id="ctName" maxlength="40" placeholder="예) 11월 마지막 주일 예배 콘티">
+  <label>주제 · 설교 말씀 내용</label><textarea id="ctTopic" rows="4" placeholder="예) 주제: 감사 / 본문: 시 100편 / 설교 요약…"></textarea>
+  <label>곡 선택 <span class="sub" id="ctCount"></span></label>
+  <div class="ctlist" id="ctList"></div>
+  <div class="foot"><button class="btn ghost" id="ctClear">선택 해제</button><button class="btn" id="ctPdf">⬇ 콘티 PDF 만들기</button></div>
+</div></div>
+<div class="ov" id="catOv"><div class="modal">
+  <h2>🏷 분류 관리</h2>
+  <div style="display:flex;gap:8px"><input type="text" id="cmName" maxlength="8" placeholder="새 분류 이름 (예: 회복)"><button class="btn" id="cmAdd">추가</button></div>
+  <div id="cmList" style="margin-top:10px"></div>
+  <div class="sub">분류는 팀 전체가 같이 써요. 분류를 지워도 곡에 달린 태그는 남아 있어요.</div>
+  <div class="foot"><button class="btn" id="cmClose">닫기</button></div>
+</div></div>
+<div class="ov" id="libOv"><div class="modal wide">
+  <div class="row"><h2>📁 악보 보관함</h2><button class="btn sm ghost" id="libClose">닫기</button></div>
+  <div class="addbox" id="libAdd" style="display:none">
+    <div class="r"><b>악보 첨부</b><select id="lKey"></select><input type="text" id="lTitle" list="songList" maxlength="40" placeholder="곡 제목 (선택)"><datalist id="songList"></datalist></div>
+    <div class="r"><input type="file" id="lFile" accept="image/*" multiple><button class="btn sm" id="lSave">보관함에 저장</button></div>
+    <div class="thumbs" id="lThumbs"></div>
+  </div>
+  <div class="chips" id="libChips"></div>
+  <div id="libBody"></div>
+</div></div>
+<div class="ov" id="sheetOv"><div class="modal sheet">
+  <h2 id="sh"></h2><div class="nav" id="dlBar"><button class="btn sm" id="dlPdf">⬇ PDF로 저장</button><button class="btn sm ghost" id="dlImg">⬇ 이미지로 저장</button></div><div id="sImgs"></div>
+  <div class="foot"><button class="btn" id="sClose">닫기</button></div>
+</div></div>
+
+<div class="ov" id="mngOv"><div class="modal">
+  <h2>멤버 관리</h2><div id="mBody"></div>
+  <div class="foot"><button class="btn" id="mClose">닫기</button></div>
+</div></div>
+<div class="ov" id="shOv"><div class="modal">
+  <h2>앱 공유하기</h2>
+  <div class="sub">아래 링크를 팀 인도자에게 보내 주세요. 링크를 받은 사람은 이메일로 가입·로그인한 뒤, 앱 안에서 이름을 적어 수정 권한을 요청하면 돼요.</div>
+  <label>공유 링크</label><input type="text" id="shLink" readonly>
+    <div class="foot"><button class="btn ghost" id="shClose">닫기</button><button class="btn" id="shCopy">링크 복사</button></div>
+</div></div>
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+var CATS=[{n:'찬송',c:'--c1'},{n:'고백',c:'--c2'},{n:'감사',c:'--c3'},{n:'사랑',c:'--c4'},{n:'공동체',c:'--c5'},{n:'동행',c:'--c6'},{n:'믿음',c:'--c7'}];
+var KEYS=['C','C#','D','Eb','E','F','F#','G','Ab','A','Bb','B'];
+var ALLKEYS=KEYS.concat(KEYS.map(function(k){return k+'m'}));
+var $=function(i){return document.getElementById(i)};
+var db=null,user=null,assets=null,myId=null,isOwner=false,ready=false;
+var songs=[],members={},requests={},myReq=null,names={};
+var cat='',editId=null,fCats=[],fImgs=[],armed=null;
+function toast(t){var e=$('toast');e.textContent=t;e.style.display='block';setTimeout(function(){e.style.display='none'},2800)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function catColor(n){var c=CATS.filter(function(x){return x.n===n})[0];return c?(c.c.charAt(0)==='#'?c.c:'var('+c.c+')'):'var(--line)'}
+function safeUrl(u){return /^https?:\/\//i.test(u)?u:''}
+function canWrite(){return !!db&&(isOwner||!!members[myId])}
+function nm(id){return names[id]||'이름 없음'}
+
+function banner(){
+  var b=$('banner'),h='';
+  if(!db){h=needCfg?'⚙ <b>서버 설정이 필요해요.</b> index.html 위쪽 CFG에 Supabase 주소와 키를 넣어 주세요.':ready?'🔐 <b>로그인이 필요해요.</b> 이메일과 비밀번호(6자 이상)로 가입하거나 로그인해 주세요.<br><input type="text" id="aEmail" placeholder="이메일" style="width:210px"> <input type="password" id="aPw" placeholder="비밀번호" style="width:150px"> <button class="btn sm" id="aIn">로그인</button> <button class="btn sm ghost" id="aUp">가입</button>':'불러오는 중…'}
+  else if(isOwner){h='👑 <b>관리자</b>입니다. 요청이 오면 “멤버 관리”에서 수락해 주세요.'}
+  else if(members[myId]){h='✅ <b>공동작업자</b> · 곡을 등록·수정할 수 있어요.'}
+  else if(myReq){h='⏳ 수정 권한 <b>승인 대기 중</b>이에요. 관리자가 수락하면 곡을 등록할 수 있어요.'}
+  else{h='👀 지금은 <b>보기 전용</b>이에요. <br><small>관리자가 확인할 수 있게 실명과 소속을 적어 주세요.</small><br><input type="text" id="rName" maxlength="20" placeholder="이름 (필수, 예: 홍길동)"> <input type="text" id="rMemo" maxlength="40" placeholder="소속·역할 (예: 청년부 인도자)" style="width:210px"> <button class="btn sm" id="rBtn">수정 권한 요청</button>'}
+  var ls=localSongs();if(canWrite()&&ls.length)h+=' <button class="btn sm" id="impBtn">이 기기에 저장된 곡 '+ls.length+'곡 가져오기</button>';
+  b.innerHTML=h;
+  var rb=$('rBtn');if(rb)rb.onclick=sendReq;
+  var ib=$('impBtn');if(ib)ib.onclick=importLocal;
+  var ai=$('aIn');if(ai){ai.onclick=function(){doAuth(false)};$('aUp').onclick=function(){doAuth(true)}}
+  $('add').style.display=canWrite()?'':'none';
+  $('mng').style.display=isOwner?'':'none';$('cm').style.display=canWrite()?'':'none';
+  var n=Object.keys(requests).length;$('pend').style.display=(isOwner&&n)?'':'none';$('pend').textContent=n;
+}
+function localSongs(){try{if(localStorage.getItem('worshipSongs.v1.done'))return[];return JSON.parse(localStorage.getItem('worshipSongs.v1')||'[]')}catch(e){return[]}}
+function toBlob(d){var p=d.split(','),m=/:(.*?);/.exec(p[0]),b=atob(p[1]),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return new Blob([u],{type:m?m[1]:'image/jpeg'})}
+var importing=false;
+async function importLocal(){
+  if(importing)return;importing=true;toast('가져오는 중…');
+  var ls=localSongs(),ok=0,skip=0;
+  for(var i=0;i<ls.length;i++){var s=ls[i],urls=[];
+    for(var j=0;j<(s.imgs||[]).length;j++){var d=s.imgs[j];
+      if(/^data:/.test(d)){if(!assets){skip++;continue}try{var r=await assets.upload(toBlob(d));urls.push(r.url)}catch(e){skip++}}else urls.push(d)}
+    try{await db.doc('songs/'+s.id).set({title:s.title||'',lyric:s.lyric||'',yt:s.yt||'',key:s.key||'C',cats:s.cats||[],imgs:urls,at:Date.now()-i});ok++}catch(e){}
+  }
+  importing=false;
+  if(ok===ls.length){try{localStorage.setItem('worshipSongs.v1.done','1')}catch(e){}}
+  toast(ok+'곡을 가져왔어요'+(skip?' (악보 '+skip+'장 제외)':''));render();
+}
+function sendReq(){
+  var n=$('rName').value.trim();if(!n){toast('이름을 입력해 주세요');return}
+  db.doc('requests/'+myId).set({note:n,memo:($('rMemo').value||'').trim(),at:Date.now()}).then(function(){toast('요청을 보냈어요')},function(){toast('요청을 보내지 못했어요')});
+}
+function resolveNames(ids){
+  if(!user||!ids.length)return Promise.resolve();
+  return user.profiles(ids).then(function(p){ids.forEach(function(i){if(p[i]&&p[i].name)names[i]=p[i].name})}).catch(function(){});
+}
+function mngRender(){
+  var rq=Object.keys(requests),mb=Object.keys(members),h='<label>수락 대기</label>';
+  h+=rq.length?rq.map(function(id){return '<div class="mrow"><div><b>'+esc(requests[id].note||'')+'</b><small>'+esc(requests[id].memo||'')+' · 계정: '+esc(nm(id))+' · '+new Date(requests[id].at||0).toLocaleDateString('ko-KR')+'</small></div><div><button class="btn sm" data-ok="'+id+'">수락</button> <button class="btn sm ghost" data-no="'+id+'">거절</button></div></div>'}).join(''):'<div class="sub">대기 중인 요청이 없어요.</div>';
+  h+='<label>공동작업자</label>';
+  h+=mb.length?mb.map(function(id){return '<div class="mrow"><div><b>'+esc(members[id].note||'')+'</b><small>'+esc(members[id].memo||'')+' · 계정: '+esc(nm(id))+'</small></div><button class="btn sm ghost" data-rm="'+id+'">권한 해제</button></div>'}).join(''):'<div class="sub">아직 없어요.</div>';
+  $('mBody').innerHTML=h;
+}
+$('mBody').onclick=function(e){var t=e.target,ok=t.getAttribute('data-ok'),no=t.getAttribute('data-no'),rm=t.getAttribute('data-rm');
+  if(ok)db.doc('members/'+ok).set({note:requests[ok]?requests[ok].note:'',memo:requests[ok]?(requests[ok].memo||''):'',at:Date.now()}).then(function(){return db.doc('requests/'+ok).delete()}).catch(function(){toast('처리하지 못했어요')});
+  if(no)db.doc('requests/'+no).delete().catch(function(){toast('처리하지 못했어요')});
+  if(rm)db.doc('members/'+rm).delete().catch(function(){toast('처리하지 못했어요')})};
+var SHARE=location.origin+location.pathname;
+$('shr').onclick=function(){if(SHARE)$('shLink').value=SHARE;$('shOv').classList.add('show')};
+$('shClose').onclick=function(){$('shOv').classList.remove('show')};
+$('shCopy').onclick=function(){var i=$('shLink');i.focus();i.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}
+  if(ok){toast('링크를 복사했어요');return}
+  if(navigator.clipboard){navigator.clipboard.writeText(i.value).then(function(){toast('링크를 복사했어요')},function(){toast('링크를 길게 눌러 복사해 주세요')})}else toast('링크를 길게 눌러 복사해 주세요')};
+var PAL=['#f0c9a4','#d3e0a1','#e8bde0','#b5d3ee','#efe08a','#b9e3c8','#e6c0c0','#c5cdf0'],cmArmed=null;
+function saveCats(l){return db.doc('settings/cats').set({list:l}).catch(function(){toast('저장 권한이 없거나 오류가 났어요')})}
+function cmRender(){
+  $('cmList').innerHTML=CATS.map(function(c,i){var n=songs.filter(function(s){return s.cats.indexOf(c.n)>-1}).length;
+    return '<div class="mrow"><div><span style="display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:8px;background:'+catColor(c.n)+'"></span><b>'+esc(c.n)+'</b> <small style="display:inline">'+n+'곡</small></div><button class="btn sm ghost" data-d="'+i+'">'+(cmArmed===i?'정말 삭제?':'삭제')+'</button></div>'}).join('');
+}
+$('cm').onclick=function(){cmRender();$('catOv').classList.add('show')};
+$('cmClose').onclick=function(){$('catOv').classList.remove('show')};
+$('cmAdd').onclick=function(){
+  var n=$('cmName').value.trim();if(!n){toast('분류 이름을 입력해 주세요');return}
+  if(CATS.some(function(c){return c.n===n})){toast('이미 있는 분류예요');return}
+  var l=CATS.concat([{n:n,c:PAL[CATS.length%PAL.length]}]);
+  saveCats(l).then(function(){$('cmName').value='';toast('‘'+n+'’ 분류를 추가했어요')})};
+$('cmList').onclick=function(e){var d=e.target.getAttribute('data-d');if(d===null)return;d=+d;
+  if(cmArmed===d){cmArmed=null;saveCats(CATS.filter(function(c,i){return i!==d}))}
+  else{cmArmed=d;cmRender();setTimeout(function(){if(cmArmed===d){cmArmed=null;cmRender()}},3000)}};
+var ctSel=[];
+function ctRender(){
+  ctSel=ctSel.filter(function(id){return songs.some(function(s){return s.id===id})});
+  var st=$('ctList').scrollTop;
+  $('ctList').innerHTML=songs.map(function(s){var i=ctSel.indexOf(s.id),on=i>-1;
+    return '<div class="ct'+(on?' on':'')+'" data-id="'+s.id+'"><div class="num">'+(on?(i+1):'')+'</div><div class="mid"><div class="t">'+esc(s.title)+'</div><small>'+esc(s.key)+' · '+(s.imgs.length?'악보 '+s.imgs.length+'장':'악보 없음')+(s.cats.length?' · '+esc(s.cats.join(', ')):'')+'</small></div>'+(on?'<div class="mv"><button data-mv="-1">▲</button><button data-mv="1">▼</button></div>':'')+'</div>'}).join('')||'<div class="empty" style="grid-column:1/-1">등록된 곡이 없어요.</div>';
+  $('ctList').scrollTop=st;
+  $('ctCount').textContent='· 선택 '+ctSel.length+'곡 (번호 = 연주 순서)';
+}
+$('ct').onclick=function(){ctRender();$('ctOv').classList.add('show')};
+$('ctClose').onclick=function(){$('ctOv').classList.remove('show')};
+$('ctClear').onclick=function(){ctSel=[];ctRender()};
+$('ctList').onclick=function(e){
+  var row=e.target.closest('.ct');if(!row)return;var id=row.getAttribute('data-id'),m=e.target.getAttribute('data-mv'),i=ctSel.indexOf(id);
+  if(m){var j=i+(+m);if(i>-1&&j>=0&&j<ctSel.length){var t=ctSel[i];ctSel[i]=ctSel[j];ctSel[j]=t}ctRender();return}
+  if(i>-1)ctSel.splice(i,1);else ctSel.push(id);ctRender()};
+function wrapLines(ctx,text,maxW){var out=[];String(text).split('\n').forEach(function(p){if(!p){out.push('');return}var line='';for(var i=0;i<p.length;i++){var t=line+p[i];if(ctx.measureText(t).width>maxW&&line){out.push(line);line=p[i]}else line=t}out.push(line)});return out}
+function coverPages(name,topic,items){
+  var W=1240,H=1754,M=110,pages=[],c,x,y,F='"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif';
+  function np(){c=document.createElement('canvas');c.width=W;c.height=H;x=c.getContext('2d');x.fillStyle='#ffffff';x.fillRect(0,0,W,H);x.textBaseline='top';y=M;pages.push(c)}
+  function put(text,size,weight,color,gap){x.font=weight+' '+size+'px '+F;x.fillStyle=color;
+    wrapLines(x,text,W-2*M).forEach(function(l){if(y+size*1.5>H-M){np();x.font=weight+' '+size+'px '+F;x.fillStyle=color}x.fillText(l,M,y);y+=size*1.5});y+=gap}
+  np();
+  put(name,64,'800','#1f2328',6);
+  put(new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric'}),28,'400','#6b7280',20);
+  x.fillStyle='#d9d9d4';x.fillRect(M,y,W-2*M,3);y+=36;
+  if(topic){put('주제 · 말씀 내용',30,'700','#6b7280',8);put(topic,36,'400','#1f2328',36)}
+  put('콘티 순서',30,'700','#6b7280',8);
+  items.forEach(function(s,i){put((i+1)+'. '+s.title+'  ['+s.key+']',36,'600','#1f2328',6)});
+  return pages.map(function(p){return p.toDataURL('image/jpeg',.92)});
+}
+$('ctPdf').onclick=async function(){
+  var J=window.jspdf&&window.jspdf.jsPDF;if(!downloads||!J){toast('PDF 저장 기능을 사용할 수 없어요');return}
+  var name=$('ctName').value.trim(),topic=$('ctTopic').value.trim();
+  if(!name){toast('콘티명을 입력해 주세요');return}
+  var items=ctSel.map(function(id){return songs.filter(function(s){return s.id===id})[0]}).filter(Boolean);
+  if(!items.length){toast('곡을 한 곡 이상 선택해 주세요');return}
+  toast('PDF 만드는 중…');
+  try{
+    var pdf=new J({unit:'pt',format:'a4',orientation:'p'}),firstPage=true,skipped=0;
+    var addImg=function(d,w,h){var land=w>h,pw=land?842:595,ph=land?595:842;
+      if(firstPage)firstPage=false;else pdf.addPage([pw,ph],land?'l':'p');
+      var r=Math.min(pw/w,ph/h),dw=w*r,dh=h*r;pdf.addImage(d,'JPEG',(pw-dw)/2,(ph-dh)/2,dw,dh)};
+    coverPages(name,topic,items).forEach(function(d){addImg(d,1240,1754)});
+    for(var i=0;i<items.length;i++){
+      if(!items[i].imgs.length){skipped++;continue}
+      for(var j=0;j<items[i].imgs.length;j++){var d=await blobToUrl(await getBlob(items[i].imgs[j])),sz=await imgSize(d);addImg(d,sz[0],sz[1])}}
+    await downloads.save({filename:(name.replace(/[^0-9A-Za-z가-힣 _#()+-]/g,'').trim()||'콘티')+'.pdf',data:pdf.output('blob')});
+    if(skipped)toast('악보가 없는 '+skipped+'곡은 순서에만 포함됐어요');
+  }catch(e){if(!(e&&e.code==='declined'))toast('PDF를 만들지 못했어요')}};
+var downloads=null,viewImgs=[],viewTitle='';
+function fname(){return (viewTitle||'악보').replace(/[^0-9A-Za-z가-힣 _#()+-]/g,'').trim()||'악보'}
+async function getBlob(u){
+  try{var r=await fetch(u);if(r.ok)return await r.blob()}catch(e){}
+  return new Promise(function(res,rej){var im=new Image();im.onload=function(){var c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;c.getContext('2d').drawImage(im,0,0);c.toBlob(function(b){b?res(b):rej()},'image/jpeg',.92)};im.onerror=rej;im.src=u})}
+function blobToUrl(b){return new Promise(function(r){var f=new FileReader();f.onload=function(){r(f.result)};f.readAsDataURL(b)})}
+function imgSize(d){return new Promise(function(r){var i=new Image();i.onload=function(){r([i.width,i.height])};i.src=d})}
+$('dlImg').onclick=async function(){
+  if(!downloads)return;
+  for(var i=0;i<viewImgs.length;i++){
+    try{var b=await getBlob(viewImgs[i]);await downloads.save({filename:fname()+(viewImgs.length>1?'_'+(i+1):'')+'.jpg',data:b})}
+    catch(e){if(e&&e.code==='declined')break;toast('저장하지 못했어요');break}}};
+$('dlPdf').onclick=async function(){
+  var J=window.jspdf&&window.jspdf.jsPDF;if(!downloads||!J){toast('PDF 기능을 쓸 수 없어요. 이미지로 저장해 주세요');return}
+  toast('PDF 만드는 중…');
+  try{var pdf=null;
+    for(var i=0;i<viewImgs.length;i++){
+      var d=await blobToUrl(await getBlob(viewImgs[i])),sz=await imgSize(d),w=sz[0],h=sz[1],o=w>h?'l':'p';
+      if(!pdf)pdf=new J({unit:'px',format:[w,h],orientation:o,hotfixes:['px_scaling']});else pdf.addPage([w,h],o);
+      pdf.addImage(d,'JPEG',0,0,w,h)}
+    if(pdf)await downloads.save({filename:fname()+'.pdf',data:pdf.output('blob')})
+  }catch(e){if(!(e&&e.code==='declined'))toast('저장하지 못했어요')}};
+var sheets=[],libKey='',libArmed=null,lImgs=[];
+$('lKey').innerHTML=ALLKEYS.map(function(k){return '<option>'+k+'</option>'}).join('');
+function libRender(){
+  var w=canWrite();$('libAdd').style.display=w?'':'none';
+  $('songList').innerHTML=songs.map(function(s){return '<option value="'+esc(s.title)+'">'}).join('');
+  var cnt={};sheets.forEach(function(s){cnt[s.key]=(cnt[s.key]||0)+1});
+  var ch='<button class="chip'+(libKey===''?' on':'')+'" data-k="">전체<small>'+sheets.length+'</small></button>';
+  ALLKEYS.forEach(function(k){if(cnt[k])ch+='<button class="chip'+(libKey===k?' on':'')+'" data-k="'+k+'">'+k+'<small>'+cnt[k]+'</small></button>'});
+  $('libChips').innerHTML=ch;
+  var h='';
+  ALLKEYS.forEach(function(k){
+    if(libKey&&libKey!==k)return;
+    var g=sheets.filter(function(s){return s.key===k});if(!g.length)return;
+    h+='<div class="kh"><span class="key">'+esc(k)+'</span><span class="sub">'+g.length+'개</span></div><div class="sg">'+g.map(function(s){return '<div class="sc" data-id="'+s.id+'"><img src="'+esc(s.imgs[0]||'')+'" alt=""><div class="st">'+esc(s.title||'제목 없음')+'</div><small>'+s.imgs.length+'장</small>'+(w?'<button class="btn sm ghost" data-del="'+s.id+'">'+(libArmed===s.id?'정말 삭제?':'삭제')+'</button>':'')+'</div>'}).join('')+'</div>';
+  });
+  $('libBody').innerHTML=h||'<div class="empty">보관된 악보가 없어요.</div>';
+  $('lThumbs').innerHTML=lImgs.map(function(d,i){return '<div><img src="'+esc(d)+'" alt="악보 '+(i+1)+'"><b data-i="'+i+'">×</b></div>'}).join('');
+}
+$('lib').onclick=function(){libRender();$('libOv').classList.add('show')};
+$('libClose').onclick=function(){$('libOv').classList.remove('show')};
+$('libChips').onclick=function(e){var b=e.target.closest('.chip');if(!b)return;libKey=b.getAttribute('data-k');libRender()};
+$('lThumbs').onclick=function(e){var i=e.target.getAttribute('data-i');if(i!==null){lImgs.splice(+i,1);libRender()}};
+$('lFile').onchange=function(e){
+  if(!assets){toast('이 계정에서는 악보 업로드를 사용할 수 없어요');return}
+  toast('악보 올리는 중…');
+  Promise.all(Array.prototype.map.call(e.target.files,function(f){return shrink(f).then(function(b){return b?assets.upload(b):null}).catch(function(){return null})}))
+  .then(function(a){a.forEach(function(r){if(r&&r.url)lImgs.push(r.url)});e.target.value='';libRender()})};
+$('lSave').onclick=function(){
+  if(!lImgs.length){toast('악보 이미지를 먼저 첨부해 주세요');return}
+  var o={title:$('lTitle').value.trim(),key:$('lKey').value,imgs:lImgs.slice(),at:Date.now()};
+  db.doc('sheets/'+Date.now()).set(o).then(function(){lImgs=[];$('lTitle').value='';libKey=o.key;libRender();toast(o.key+' 키에 저장했어요')},function(){toast('저장 권한이 없거나 오류가 났어요')})};
+$('libBody').onclick=function(e){
+  var d=e.target.closest('[data-del]');
+  if(d){var id=d.getAttribute('data-del');
+    if(libArmed===id){libArmed=null;db.doc('sheets/'+id).delete().catch(function(){toast('삭제하지 못했어요')})}
+    else{libArmed=id;libRender();setTimeout(function(){if(libArmed===id){libArmed=null;libRender()}},3000)}
+    return}
+  var c=e.target.closest('.sc');if(!c)return;
+  var s=sheets.filter(function(x){return x.id===c.getAttribute('data-id')})[0];if(!s)return;
+  viewImgs=s.imgs;viewTitle=(s.title||'악보')+' '+s.key;$('dlBar').style.display=downloads?'':'none';$('sh').textContent=(s.title||'악보')+' · '+s.key;
+  $('sImgs').innerHTML=s.imgs.map(function(u,i){return '<img src="'+esc(u)+'" alt="악보 '+(i+1)+'">'}).join('');
+  $('sheetOv').classList.add('show')};
+$('mng').onclick=function(){mngRender();$('mngOv').classList.add('show')};
+$('mClose').onclick=function(){$('mngOv').classList.remove('show')};
+
+function render(){
+  banner();if($('libOv').classList.contains('show'))libRender();if($('ctOv').classList.contains('show'))ctRender();
+  var q=$('q').value.trim().toLowerCase(),kf=$('kf').value;
+  var chips='<button class="chip'+(cat===''?' on':'')+'" data-c="">전체<small>'+songs.length+'</small></button>';
+  CATS.forEach(function(c){var n=songs.filter(function(s){return s.cats.indexOf(c.n)>-1}).length;
+    chips+='<button class="chip'+(cat===c.n?' on':'')+'" data-c="'+c.n+'">'+c.n+'<small>'+n+'</small></button>'});
+  $('chips').innerHTML=chips;
+  var list=songs.filter(function(s){return(!cat||s.cats.indexOf(cat)>-1)&&(!kf||s.key===kf)&&(!q||(s.title+' '+(s.lyric||'')).toLowerCase().indexOf(q)>-1)});
+  $('count').textContent='등록된 곡 '+songs.length+'곡'+(list.length!==songs.length?' · 검색결과 '+list.length+'곡':'');
+  if(!list.length){$('list').innerHTML='<div class="empty" style="grid-column:1/-1">'+(songs.length?'조건에 맞는 곡이 없어요.':'아직 등록된 곡이 없어요.')+'</div>';return}
+  var w=canWrite();
+  $('list').innerHTML=list.map(function(s){
+    var yt=safeUrl(s.yt||'');
+    return '<div class="card"><div class="row"><div class="title">'+esc(s.title)+'</div><span class="key">'+esc(s.key)+'</span></div>'+
+    (s.lyric?'<div class="lyric">“'+esc(s.lyric)+'”</div>':'')+
+    '<div class="tags">'+(s.cats.length?s.cats.map(function(c){return '<span class="tag" style="background:'+catColor(c)+'">'+esc(c)+'</span>'}).join(''):'<span class="sub">분류 없음</span>')+'</div>'+
+    '<div class="acts">'+(yt?'<a class="btn sm" href="'+esc(yt)+'" target="_blank" rel="noopener">▶ 음원</a>':'')+
+    (s.imgs.length?'<button class="btn sm ghost" data-a="sheet" data-id="'+s.id+'">🎼 악보 '+s.imgs.length+'</button>':'')+
+    (w?'<button class="btn sm ghost" data-a="edit" data-id="'+s.id+'">수정</button><button class="btn sm ghost" data-a="del" data-id="'+s.id+'">'+(armed===s.id?'정말 삭제?':'삭제')+'</button>':'')+'</div></div>'}).join('');
+}
+function drawForm(){
+  $('fCats').innerHTML=CATS.map(function(c){return '<button type="button" class="chip'+(fCats.indexOf(c.n)>-1?' on':'')+'" data-c="'+c.n+'">'+c.n+'</button>'}).join('');
+  $('fThumbs').innerHTML=fImgs.map(function(d,i){return '<div><img src="'+esc(d)+'" alt="악보 '+(i+1)+'"><b data-i="'+i+'">×</b></div>'}).join('');
+}
+function openForm(id){
+  editId=id||null;var s=songs.filter(function(x){return x.id===id})[0];
+  $('fh').textContent=s?'곡 수정':'곡 등록';
+  $('fTitle').value=s?s.title:'';$('fLyric').value=s?(s.lyric||''):'';$('fYt').value=s?(s.yt||''):'';$('fKey').value=s?s.key:'C';
+  fCats=s?s.cats.slice():[];fImgs=s?s.imgs.slice():[];$('fFile').value='';
+  drawForm();$('formOv').classList.add('show');
+}
+function shrink(file){return new Promise(function(res){
+  var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){
+    var w=Math.min(1400,im.width),h=im.height*w/im.width,c=document.createElement('canvas');
+    c.width=w;c.height=h;var x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,w,h);x.drawImage(im,0,0,w,h);
+    c.toBlob(function(b){res(b)},'image/jpeg',.75)};im.onerror=function(){res(null)};im.src=r.result};
+  r.onerror=function(){res(null)};r.readAsDataURL(file)})}
+$('fFile').onchange=function(e){
+  if(!assets){toast('이 계정에서는 악보 업로드를 사용할 수 없어요');return}
+  toast('악보 올리는 중…');
+  Promise.all(Array.prototype.map.call(e.target.files,function(f){return shrink(f).then(function(b){return b?assets.upload(b):null}).catch(function(){return null})}))
+  .then(function(a){a.forEach(function(r){if(r&&r.url)fImgs.push(r.url)});drawForm()})};
+$('fThumbs').onclick=function(e){var i=e.target.getAttribute('data-i');if(i!==null){fImgs.splice(+i,1);drawForm()}};
+$('fCats').onclick=function(e){var c=e.target.getAttribute('data-c');if(!c)return;var i=fCats.indexOf(c);i>-1?fCats.splice(i,1):fCats.push(c);drawForm()};
+$('save').onclick=function(){
+  var t=$('fTitle').value.trim();if(!t){toast('제목을 입력해 주세요');return}
+  var id=editId||String(Date.now()),old=songs.filter(function(x){return x.id===id})[0];
+  var o={title:t,lyric:$('fLyric').value.trim(),yt:$('fYt').value.trim(),key:$('fKey').value,cats:fCats.slice(),imgs:fImgs.slice(),at:old?old.at:Date.now()};
+  db.doc('songs/'+id).set(o).then(function(){$('formOv').classList.remove('show');toast('저장했어요')},function(){toast('저장 권한이 없거나 오류가 났어요')});
+};
+$('cancel').onclick=function(){$('formOv').classList.remove('show')};
+$('add').onclick=function(){openForm()};
+$('sClose').onclick=function(){$('sheetOv').classList.remove('show')};
+$('chips').onclick=function(e){var b=e.target.closest('.chip');if(!b)return;cat=b.getAttribute('data-c');render()};
+$('q').oninput=render;$('kf').onchange=render;
+$('list').onclick=function(e){var b=e.target.closest('[data-a]');if(!b)return;
+  var id=b.getAttribute('data-id'),a=b.getAttribute('data-a'),s=songs.filter(function(x){return x.id===id})[0];if(!s)return;
+  if(a==='edit')openForm(id);
+  if(a==='del'){if(armed===id){armed=null;db.doc('songs/'+id).delete().catch(function(){toast('삭제하지 못했어요')})}else{armed=id;render();setTimeout(function(){if(armed===id){armed=null;render()}},3000)}}
+  if(a==='sheet'){viewImgs=s.imgs;viewTitle=s.title+' '+s.key;$('dlBar').style.display=downloads?'':'none';$('sh').textContent=s.title+' · '+s.key;$('sImgs').innerHTML=s.imgs.map(function(d,i){return '<img src="'+esc(d)+'" alt="악보 '+(i+1)+'">'}).join('');$('sheetOv').classList.add('show')}};
+
+$('fKey').innerHTML=ALLKEYS.map(function(k){return '<option>'+k+'</option>'}).join('');
+$('kf').innerHTML+=ALLKEYS.map(function(k){return '<option>'+k+'</option>'}).join('');
+function mapDocs(snap){var o={};(snap.docs||[]).forEach(function(d){o[d.id]=d.data()});return o}
+render();
+var CFG={url:'여기에_SUPABASE_URL',key:'여기에_ANON_KEY'};
+var sb=null,myEmail='',needCfg=false,LS=[];
+function pull(){if(!sb)return Promise.resolve();
+  return sb.from('docs').select('path,data').then(function(r){if(r.error)return;var m={};(r.data||[]).forEach(function(x){m[x.path]=x.data});LS.forEach(function(l){l(m)})})}
+function mkDb(){
+  function wr(p){return p.then(function(r){if(r&&r.error)throw r.error;return pull()})}
+  function doc(path){return{
+    set:function(d){return wr(sb.from('docs').upsert({path:path,data:d,updated_at:new Date().toISOString()}))},
+    delete:function(){return wr(sb.from('docs').delete().eq('path',path))},
+    onSnapshot:function(cb){var last;LS.push(function(m){var v=m[path],j=JSON.stringify(v===undefined?null:v);if(j===last)return;last=j;cb({exists:v!==undefined,data:function(){return v}})})}}}
+  function col(name,fld){return{
+    orderBy:function(f){return col(name,f)},
+    onSnapshot:function(cb){var last;LS.push(function(m){var rows=[];
+      Object.keys(m).forEach(function(k){if(k.indexOf(name+'/')===0)rows.push({id:k.slice(name.length+1),v:m[k]})});
+      if(fld)rows.sort(function(a,b){return (b.v[fld]||0)-(a.v[fld]||0)});
+      var j=JSON.stringify(rows);if(j===last)return;last=j;
+      cb({docs:rows.map(function(r){return{id:r.id,data:function(){return r.v}}})})})}}}
+  return{doc:doc,collection:function(n){return col(n,null)}}}
+function mkAssets(){return{upload:function(blob){
+  var n=(window.crypto&&crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(36).slice(2))+'.jpg';
+  return sb.storage.from('sheets').upload(n,blob,{contentType:'image/jpeg'}).then(function(r){if(r.error)throw r.error;return{url:sb.storage.from('sheets').getPublicUrl(n).data.publicUrl}})}}}
+function mkDl(){return{save:function(o){var b=(o.data instanceof Blob)?o.data:new Blob([o.data]),u=URL.createObjectURL(b),a=document.createElement('a');
+  a.href=u;a.download=o.filename;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove()},1500);return Promise.resolve()}}}
+function mkUser(){return{profiles:function(ids){return sb.from('profiles').select('id,email').in('id',ids).then(function(r){var o={};(r.data||[]).forEach(function(x){o[x.id]={name:x.email}});return o})}}}
+async function doAuth(signup){
+  var e=$('aEmail').value.trim(),p=$('aPw').value;
+  if(!e||p.length<6){toast('이메일과 비밀번호(6자 이상)를 입력해 주세요');return}
+  var r=signup?await sb.auth.signUp({email:e,password:p}):await sb.auth.signInWithPassword({email:e,password:p});
+  if(r.error){toast(r.error.message);return}
+  if(!r.data.session){toast('확인 메일을 보냈어요. 메일의 링크를 누른 뒤 로그인해 주세요');return}
+  location.reload()}
+$('lo').onclick=function(){sb.auth.signOut().then(function(){location.reload()})};
+(async function(){
+  if(CFG.url.indexOf('http')!==0||!window.supabase){needCfg=true;ready=true;render();return}
+  sb=window.supabase.createClient(CFG.url,CFG.key);
+  var ses=null;try{ses=(await sb.auth.getSession()).data.session}catch(e){}
+  if(ses){
+    myId=ses.user.id;myEmail=ses.user.email||'';db=mkDb();assets=mkAssets();downloads=mkDl();user=mkUser();
+    try{var r=await sb.rpc('is_admin');isOwner=!!r.data}catch(e){}
+    $('lo').style.display='';$('lo').textContent='로그아웃 · '+myEmail;
+    setTimeout(function(){pull();setInterval(pull,5000)},300);
+    document.addEventListener('visibilitychange',function(){if(!document.hidden)pull()});
+  }
+  ready=true;render();if(!db||!myId)return;
+  var t=setTimeout(function(){toast('불러오기가 오래 걸려요')},10000);
+  db.collection('songs').orderBy('at','desc').onSnapshot(function(s){clearTimeout(t);
+    songs=(s.docs||[]).map(function(d){var x=d.data();return{id:d.id,title:x.title||'',lyric:x.lyric||'',yt:x.yt||'',key:x.key||'C',cats:x.cats||[],imgs:x.imgs||[],at:x.at||0}});render()},function(){toast('곡 목록을 불러오지 못했어요')});
+  db.collection('members').onSnapshot(function(s){members=mapDocs(s);render()},function(){});
+  db.doc('settings/cats').onSnapshot(function(s){var d=s.exists?s.data():null,l=d&&d.list;
+    if(l&&l.length){CATS=l.filter(function(c){return c&&typeof c.n==='string'&&typeof c.c==='string'})}
+    if(cat&&!CATS.some(function(c){return c.n===cat}))cat='';
+    render();if($('catOv').classList.contains('show'))cmRender()},function(){});
+  db.collection('sheets').orderBy('at','desc').onSnapshot(function(s){sheets=(s.docs||[]).map(function(d){var x=d.data();return{id:d.id,title:x.title||'',key:x.key||'C',imgs:x.imgs||[],at:x.at||0}});if($('libOv').classList.contains('show'))libRender()},function(){toast('악보 보관함을 불러오지 못했어요')});
+  db.doc('requests/'+myId).onSnapshot(function(s){myReq=s.exists?s.data():null;render()},function(){});
+  if(isOwner)db.collection('requests').onSnapshot(function(s){requests=mapDocs(s);
+    resolveNames(Object.keys(requests).concat(Object.keys(members))).then(function(){render();if($('mngOv').classList.contains('show'))mngRender()})},function(){});
+})();
+</script>
+</body>
+</html>
